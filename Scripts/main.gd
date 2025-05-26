@@ -5,12 +5,18 @@ extends Node
 
 var temp_marker 
 var player
+var winner : int
 var player_panel_pos : Vector2i
 var grid_data : Array
 var grid_pos : Vector2i
 var board_size : int
 var board_height : int
 var cell_size : int
+var row_sum : int
+var col_sum : int
+var diagonal1_sum : int
+var diagonal2_sum : int
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -47,6 +53,9 @@ func _input(event: InputEvent) -> void:
 					grid_data[grid_pos.y][grid_pos.x] = player
 					#place that players marker
 					create_marker(player, grid_pos * cell_size + Vector2i(cell_size / 2, cell_size / 2))
+					if check_win() != 0:
+						print("Game Over")
+						get_tree().paused = true
 					player *= -1
 					# update the panel marker
 					temp_marker.queue_free() # clears previous marker first
@@ -58,6 +67,7 @@ func _input(event: InputEvent) -> void:
 
 func new_game():
 	player = 1
+	winner = 0
 	grid_data = [
 		[0,0,0],
 		[0,0,0],
@@ -78,3 +88,17 @@ func create_marker(player, position, temp=false):
 		cross.position = position
 		add_child(cross)
 		if temp == true: temp_marker = cross
+
+func check_win():
+	# add up the markers in each row, column and diagonal
+	for i in len(grid_data):
+		row_sum = grid_data[i][0] + grid_data[i][1] + grid_data[i][2]
+		col_sum = grid_data[0][i] + grid_data[1][i] + grid_data[2][i]
+		diagonal1_sum = grid_data[0][0] + grid_data[1][1] + grid_data[2][2]
+		diagonal2_sum = grid_data[0][2] + grid_data[1][1] + grid_data[2][0]
+		# check if either player has win con
+		if row_sum == 3 or col_sum == 3 or diagonal1_sum == 3 or diagonal2_sum == 3:
+			winner = 1
+		elif row_sum == 3 or col_sum == 3 or diagonal1_sum == 3 or diagonal2_sum == 3:
+			winner = -1
+	return winner
