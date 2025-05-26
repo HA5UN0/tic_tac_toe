@@ -25,6 +25,7 @@ func _ready() -> void:
 	board_height = $Board.texture.get_height()
 	#print(board_size)
 	#print(board_height)
+	#$gameOverMenu.visible = false
 	
 	# divide board size by 3 to get the size of individual cell
 	cell_size = board_size / 3
@@ -56,6 +57,7 @@ func _input(event: InputEvent) -> void:
 					if check_win() != 0:
 						print("Game Over")
 						get_tree().paused = true
+						$gameOverMenu.show()
 					player *= -1
 					# update the panel marker
 					temp_marker.queue_free() # clears previous marker first
@@ -75,6 +77,7 @@ func new_game():
 	]
 	# create a marker to show stating player's turn
 	create_marker(player, player_panel_pos + Vector2i(cell_size / 2, cell_size / 2), true)
+	$gameOverMenu.hide()
 
 func create_marker(player, position, temp=false):
 	# create a marker node and add it as a child
@@ -102,3 +105,7 @@ func check_win():
 		elif row_sum == 3 or col_sum == 3 or diagonal1_sum == 3 or diagonal2_sum == 3:
 			winner = -1
 	return winner
+
+
+func _on_game_over_menu_restart() -> void:
+	new_game()

@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2gnvss854kbd"]
+
+[ext_resource type="Script" path="res://Scripts/gameOverMenu.gd" id="1_m324v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m3jv"]
+bg_color = Color(0.365899, 0.739604, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.769099, 0.118275, 0.128058, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6misi"]
+bg_color = Color(1, 0.318472, 0.431698, 0.876)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="gameOverMenu" type="CanvasLayer"]
+script = ExtResource("1_m324v")
+
+[node name="gameOverPanel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -125.0
+offset_right = 50.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_8m3jv")
+
+[node name="resultLabel" type="Label" parent="."]
+offset_left = 166.5
+offset_top = 200.0
+offset_right = 433.5
+offset_bottom = 258.0
+theme_override_font_sizes/font_size = 40
+text = "Player 1 Wins!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="restartButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_right = -25.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_6misi")
+text = "Play Again"
+
+[connection signal="pressed" from="restartButton" to="." method="_on_restart_button_pressed"]
