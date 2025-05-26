@@ -60,6 +60,12 @@ func _input(event: InputEvent) -> void:
 						print("Game Over")
 						get_tree().paused = true
 						$gameOverMenu.show()
+						if winner == 1:
+							$gameOverMenu.get_node("resultLabel").text = "Player 1 Wins!"
+							print("player 1 wins")
+						elif winner == -1:
+							$gameOverMenu.get_node("resultLabel").text = "Player 2 Wins!"
+							print("player 2 wins")
 					# check if board has arleady been filled
 					elif moves == 9:
 						print("Game Over, Tie")
