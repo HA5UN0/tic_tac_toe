@@ -1,5 +1,9 @@
 extends Node
 
+@export var circle_scene : PackedScene
+@export var cross_scene : PackedScene
+
+
 var player 
 var grid_data : Array
 var grid_pos : Vector2i
@@ -30,13 +34,17 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			# check if mouse-click is on the board
 			if event.position.x < board_size:
-				# conver mouse position into grid location
+				# convert mouse position into grid location
 				grid_pos = Vector2i(event.position / cell_size)
 				# check first to see if anything is there
 				if grid_data[grid_pos.y][grid_pos.x] == 0:
 					grid_data[grid_pos.y][grid_pos.x] = player
+					#place that players marker
+					create_marker(player, grid_pos * cell_size + Vector2i(cell_size / 2, cell_size / 2))
 					player *= -1
 					print(grid_data)
+				else:
+					print("something is already here")
 			
 
 func new_game():
@@ -46,3 +54,14 @@ func new_game():
 		[0,0,0],
 		[0,0,0]
 	]
+
+func create_marker(player, position):
+	# create a marker node and add it as a child
+	if player == 1:
+		var circle = circle_scene.instantiate()
+		circle.position = position
+		add_child(circle)
+	else:
+		var cross = cross_scene.instantiate()
+		cross.position = position
+		add_child(cross)
