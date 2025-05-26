@@ -5,6 +5,7 @@ extends Node
 
 var temp_marker 
 var player
+var moves : int # count total moves
 var winner : int
 var player_panel_pos : Vector2i
 var grid_data : Array
@@ -51,11 +52,17 @@ func _input(event: InputEvent) -> void:
 				grid_pos = Vector2i(event.position / cell_size)
 				# check first to see if anything is there
 				if grid_data[grid_pos.y][grid_pos.x] == 0:
+					moves += 1
 					grid_data[grid_pos.y][grid_pos.x] = player
 					#place that players marker
 					create_marker(player, grid_pos * cell_size + Vector2i(cell_size / 2, cell_size / 2))
 					if check_win() != 0:
 						print("Game Over")
+						get_tree().paused = true
+						$gameOverMenu.show()
+					# check if board has arleady been filled
+					elif moves == 9:
+						print("Game Over, Tie")
 						get_tree().paused = true
 						$gameOverMenu.show()
 					player *= -1
@@ -66,19 +73,32 @@ func _input(event: InputEvent) -> void:
 				else:
 					print("something is already here")
 			
-
+# -------------------------------------------------------- #
 func new_game():
 	player = 1
+	moves = 0
 	winner = 0
 	grid_data = [
 		[0,0,0],
 		[0,0,0],
 		[0,0,0]
 	]
+	# resets vars
+	row_sum = 0
+	col_sum = 0
+	diagonal1_sum = 0
+	diagonal2_sum = 0
+	# clear existing markers
+	get_tree().call_group("circleGroup", "queue_free")
+	get_tree().call_group("crossGroup", "queue_free")
 	# create a marker to show stating player's turn
 	create_marker(player, player_panel_pos + Vector2i(cell_size / 2, cell_size / 2), true)
 	$gameOverMenu.hide()
+	# unpause game! lets goo!
+	get_tree().paused = false
 
+
+# -------------------------------------------------------- #
 func create_marker(player, position, temp=false):
 	# create a marker node and add it as a child
 	if player == 1:
@@ -102,7 +122,7 @@ func check_win():
 		# check if either player has win con
 		if row_sum == 3 or col_sum == 3 or diagonal1_sum == 3 or diagonal2_sum == 3:
 			winner = 1
-		elif row_sum == 3 or col_sum == 3 or diagonal1_sum == 3 or diagonal2_sum == 3:
+		elif row_sum == -3 or col_sum == -3 or diagonal1_sum == -3 or diagonal2_sum == -3:
 			winner = -1
 	return winner
 
