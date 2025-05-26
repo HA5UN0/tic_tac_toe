@@ -3,8 +3,9 @@ extends Node
 @export var circle_scene : PackedScene
 @export var cross_scene : PackedScene
 
-
-var player 
+var temp_marker 
+var player
+var player_panel_pos : Vector2i
 var grid_data : Array
 var grid_pos : Vector2i
 var board_size : int
@@ -18,10 +19,15 @@ func _ready() -> void:
 	board_height = $Board.texture.get_height()
 	#print(board_size)
 	#print(board_height)
-	new_game()
 	
 	# divide board size by 3 to get the size of individual cell
 	cell_size = board_size / 3
+	
+	# get coordinates of small panel on right side of window
+	player_panel_pos = $playerPanel.get_position()
+	
+	new_game()
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,6 +48,9 @@ func _input(event: InputEvent) -> void:
 					#place that players marker
 					create_marker(player, grid_pos * cell_size + Vector2i(cell_size / 2, cell_size / 2))
 					player *= -1
+					# update the panel marker
+					temp_marker.queue_free() # clears previous marker first
+					create_marker(player, player_panel_pos + Vector2i(cell_size / 2, cell_size / 2), true)
 					print(grid_data)
 				else:
 					print("something is already here")
@@ -54,14 +63,18 @@ func new_game():
 		[0,0,0],
 		[0,0,0]
 	]
+	# create a marker to show stating player's turn
+	create_marker(player, player_panel_pos + Vector2i(cell_size / 2, cell_size / 2), true)
 
-func create_marker(player, position):
+func create_marker(player, position, temp=false):
 	# create a marker node and add it as a child
 	if player == 1:
 		var circle = circle_scene.instantiate()
 		circle.position = position
 		add_child(circle)
+		if temp == true: temp_marker = circle
 	else:
 		var cross = cross_scene.instantiate()
 		cross.position = position
 		add_child(cross)
+		if temp == true: temp_marker = cross
