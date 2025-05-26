@@ -69,6 +69,7 @@ func _input(event: InputEvent) -> void:
 					# check if board has arleady been filled
 					elif moves == 9:
 						print("Game Over, Tie")
+						$gameOverMenu.get_node("resultLabel").text = "Tie Game!"
 						get_tree().paused = true
 						$gameOverMenu.show()
 					player *= -1
