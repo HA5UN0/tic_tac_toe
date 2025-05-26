@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bo3lg7k2pmbw4"]
+[gd_scene load_steps=10 format=3 uid="uid://bo3lg7k2pmbw4"]
 
 [ext_resource type="PackedScene" uid="uid://cdi67c0622wha" path="res://Scenes/Board.tscn" id="1_6xynr"]
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_cy7a8"]
@@ -18,6 +18,24 @@ border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 border_color = Color(0.654232, 0.654232, 0.654232, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="GDScript" id="GDScript_adfcv"]
+script/source = "extends Node2D
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjyho"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.819655, 0.819655, 0.819654, 1)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
@@ -62,5 +80,55 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_by0nl")
 
 [node name="gameOverMenu" parent="." instance=ExtResource("5_opywx")]
 process_mode = 2
+
+[node name="scoreBoard" type="Node2D" parent="."]
+script = SubResource("GDScript_adfcv")
+
+[node name="scorePanel" type="Panel" parent="scoreBoard"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 650.0
+offset_top = 450.0
+offset_right = 850.0
+offset_bottom = 550.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jjyho")
+
+[node name="circleScore" type="Label" parent="scoreBoard/scorePanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -37.0
+offset_top = 15.0
+offset_right = 37.0
+offset_bottom = 43.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0.488641, 0.21908, 1)
+theme_override_font_sizes/font_size = 20
+text = "circle: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="crossScore" type="Label" parent="scoreBoard/scorePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -36.5
+offset_top = -40.0
+offset_right = 36.5
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.876669, 0, 0.29687, 1)
+theme_override_font_sizes/font_size = 20
+text = "cross: 0"
 
 [connection signal="restart" from="gameOverMenu" to="." method="_on_game_over_menu_restart"]

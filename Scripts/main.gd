@@ -17,7 +17,8 @@ var row_sum : int
 var col_sum : int
 var diagonal1_sum : int
 var diagonal2_sum : int
-
+var circleScore : int
+var crossScore : int
 
 
 # Called when the node enters the scene tree for the first time.
@@ -62,10 +63,16 @@ func _input(event: InputEvent) -> void:
 						$gameOverMenu.show()
 						if winner == 1:
 							$gameOverMenu.get_node("resultLabel").text = "Player 1 Wins!"
+							updateScoreBoard(1, 0)
+							$scoreBoard/scorePanel/circleScore.text = "circle score: " + str(circleScore)
 							print("player 1 wins")
+							print(crossScore, circleScore)
 						elif winner == -1:
 							$gameOverMenu.get_node("resultLabel").text = "Player 2 Wins!"
+							updateScoreBoard(0, 1)
+							$scoreBoard/scorePanel/crossScore.text = "cross score: " + str(crossScore)
 							print("player 2 wins")
+							print(crossScore, circleScore)
 					# check if board has arleady been filled
 					elif moves == 9:
 						print("Game Over, Tie")
@@ -136,3 +143,7 @@ func check_win():
 
 func _on_game_over_menu_restart() -> void:
 	new_game()
+
+func updateScoreBoard(p1, p2):
+	circleScore += p1
+	crossScore += p2
